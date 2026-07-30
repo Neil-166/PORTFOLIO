@@ -1,0 +1,10 @@
+import { useMemo, useState } from 'react';
+import { FaMagnifyingGlass, FaPenNib } from 'react-icons/fa6';
+import { Seo } from '@/components/ui/Seo';
+import { PageShell } from '@/components/ui/PageShell';
+import { Section } from '@/components/ui/Section';
+import { EmptyState } from '@/components/ui/EmptyState';
+
+const categories = ['All', 'Engineering', 'Learning', 'Notes'];
+const articles: { title: string; category: string; excerpt: string; date: string }[] = [];
+export default function Blog() { const [query, setQuery] = useState(''); const [category, setCategory] = useState('All'); const results = useMemo(() => articles.filter((article) => (category === 'All' || article.category === category) && article.title.toLowerCase().includes(query.toLowerCase())), [category, query]); return <><Seo title="Blog" path="/blog" /><PageShell><Section eyebrow="WRITING" title="Notes from the build."><div className="flex flex-col gap-4 sm:flex-row"><label className="relative flex-1"><span className="sr-only">Search articles</span><FaMagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search writing…" className="w-full rounded-xl border border-line bg-surface py-3 pl-11 pr-4 text-sm text-ink outline-none placeholder:text-muted focus:border-brand" /></label><div className="flex gap-2 overflow-x-auto">{categories.map((item) => <button key={item} onClick={() => setCategory(item)} className={category === item ? 'shrink-0 rounded-xl bg-brand px-4 py-2 text-sm font-bold text-slate-950' : 'shrink-0 rounded-xl border border-line px-4 py-2 text-sm font-bold text-muted'}>{item}</button>)}</div></div><div className="mt-8">{results.length ? <div /> : <EmptyState title="The first note is on its way" copy="I’m collecting worthwhile lessons from projects and the CSE journey before publishing them here." action={<span className="inline-flex items-center gap-2 text-sm font-bold text-brand"><FaPenNib />Writing in progress</span>} />}</div></Section></PageShell></>; }
