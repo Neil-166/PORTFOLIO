@@ -6,6 +6,7 @@ import Lenis from 'lenis';
 import { SiteLayout } from '@/components/layout/SiteLayout';
 import { PageLoader } from '@/components/ui/PageLoader';
 import { ScrollToTop } from '@/components/ui/ScrollToTop';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 const Home = lazy(() => import('@/pages/Home'));
 const About = lazy(() => import('@/pages/About'));
@@ -56,7 +57,9 @@ function AnimatedRoutes() {
 }
 
 function SmoothScroll() {
+  const reducedMotion = useReducedMotion();
   useEffect(() => {
+    if (reducedMotion) return undefined;
     const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
     let frame = 0;
     const animate = (time: number) => {
@@ -68,7 +71,7 @@ function SmoothScroll() {
       cancelAnimationFrame(frame);
       lenis.destroy();
     };
-  }, []);
+  }, [reducedMotion]);
   return null;
 }
 

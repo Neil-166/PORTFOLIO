@@ -2,6 +2,7 @@ import type { AnchorHTMLAttributes, ButtonHTMLAttributes, MouseEvent, PropsWithC
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 type BaseProps = PropsWithChildren<{ variant?: 'primary' | 'secondary' | 'ghost'; className?: string }>;
 type ButtonProps = BaseProps & ButtonHTMLAttributes<HTMLButtonElement>;
@@ -22,10 +23,12 @@ function addRipple(event: MouseEvent<HTMLElement>) {
 }
 
 export function Button({ variant = 'primary', className, children, onClick, ...props }: ButtonProps) {
-  return <motion.span whileTap={{ scale: 0.97 }} className="inline-flex"><button className={cn('btn-base', styles[variant], className)} onClick={(event) => { addRipple(event); onClick?.(event); }} {...props}>{children}</button></motion.span>;
+  const reducedMotion = useReducedMotion();
+  return <motion.span whileTap={reducedMotion ? undefined : { scale: 0.97 }} className="inline-flex"><button className={cn('btn-base', styles[variant], className)} onClick={(event) => { addRipple(event); onClick?.(event); }} {...props}>{children}</button></motion.span>;
 }
 export function ButtonLink({ variant = 'primary', className, children, to, onClick, ...props }: LinkProps) {
+  const reducedMotion = useReducedMotion();
   const classes = cn('btn-base', styles[variant], className);
-  if (to) return <motion.span whileTap={{ scale: 0.97 }} className="inline-flex"><Link className={classes} to={to} onClick={(event) => { addRipple(event); onClick?.(event); }}>{children}</Link></motion.span>;
-  return <motion.span whileTap={{ scale: 0.97 }} className="inline-flex"><a className={classes} onClick={(event) => { addRipple(event); onClick?.(event); }} {...props}>{children}</a></motion.span>;
+  if (to) return <motion.span whileTap={reducedMotion ? undefined : { scale: 0.97 }} className="inline-flex"><Link className={classes} to={to} onClick={(event) => { addRipple(event); onClick?.(event); }}>{children}</Link></motion.span>;
+  return <motion.span whileTap={reducedMotion ? undefined : { scale: 0.97 }} className="inline-flex"><a className={classes} onClick={(event) => { addRipple(event); onClick?.(event); }} {...props}>{children}</a></motion.span>;
 }

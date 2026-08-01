@@ -1,1 +1,0 @@
-import{j as a,m as n}from"./motion-CvJwkV4J.js";import{c as o}from"./index-CTEnTGXU.js";function s({children:i,className:t}){return a.jsx(n.main,{initial:{opacity:0,y:8},animate:{opacity:1,y:0},exit:{opacity:0,y:-8},transition:{duration:.32},className:o("min-h-screen pt-24",t),children:i})}export{s as P};

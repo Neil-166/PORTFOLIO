@@ -1,15 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 export function CursorSpotlight() {
   const desktop = useMediaQuery('(pointer: fine) and (min-width: 1024px)');
-  const [position, setPosition] = useState({ x: -500, y: -500 });
+  const reducedMotion = useReducedMotion();
+  const glow = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!desktop) return undefined;
-    const onMove = (event: MouseEvent) => setPosition({ x: event.clientX, y: event.clientY });
+    if (!desktop || reducedMotion) return undefined;
+    let frame = 0;
+    let x = -500;
+    let y = -500;
+    const paint = () => {
+      frame = 0;
+      glow.current?.style.setProperty('--cursor-glow', `${x}px ${y}px`);
+    };
+    const onMove = (event: MouseEvent) => {
+      x = event.clientX;
+      y = event.clientY;
+      if (!frame) frame = window.requestAnimationFrame(paint);
+    };
     window.addEventListener('pointermove', onMove, { passive: true });
-    return () => window.removeEventListener('pointermove', onMove);
-  }, [desktop]);
-  if (!desktop) return null;
-  return <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-40 opacity-70" style={{ background: `radial-gradient(420px circle at ${position.x}px ${position.y}px, rgb(112 134 255 / 0.08), transparent 62%)` }} />;
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [desktop, reducedMotion]);
+  if (!desktop || reducedMotion) return null;
+  return <div ref={glow} aria-hidden="true" className="cursor-spotlight pointer-events-none fixed inset-0 z-40" />;
 }

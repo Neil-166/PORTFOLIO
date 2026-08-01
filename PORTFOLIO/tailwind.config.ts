@@ -13,7 +13,7 @@ export default {
         brand: 'rgb(var(--brand) / <alpha-value>)',
       },
       fontFamily: { sans: ['Manrope', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
-      boxShadow: { glow: '0 0 40px rgb(var(--brand) / 0.2)' },
+      boxShadow: { glow: '0 0 40px rgb(var(--brand) / 0.16)' },
       backgroundImage: { grid: 'linear-gradient(rgb(255 255 255 / 0.045) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / 0.045) 1px, transparent 1px)' },
     },
   },

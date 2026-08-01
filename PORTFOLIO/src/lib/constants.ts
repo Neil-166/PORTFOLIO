@@ -1,14 +1,19 @@
-import { FaGithub, FaLinkedinIn, FaEnvelope } from 'react-icons/fa6';
-import type { NavItem } from '@/types';
+import { FaGithub, FaLinkedinIn } from 'react-icons/fa6';
+import { SiCodechef, SiLeetcode } from 'react-icons/si';
+import type { CodingProfile, NavItem } from '@/types';
 
 export const siteConfig = {
   name: 'Neil Dua',
-  title: 'CSE Student & Product-minded Builder',
-  description: 'The portfolio of Neil Dua — a Computer Science student building thoughtful digital products from Delhi NCR.',
-  url: import.meta.env.VITE_SITE_URL ?? 'https://your-domain.com',
-  email: 'neildua@example.com',
+  title: 'B.Tech CSE Student | Aspiring Software Engineer',
+  description:
+    'Portfolio of Neil Dua — 2nd-year B.Tech CSE student at ABES Engineering College, Ghaziabad. Focused on DSA, React, and web development. Explore projects and connect for internship opportunities.',
+  url: (import.meta.env.VITE_SITE_URL ?? 'https://neildua.vercel.app').replace(/\/$/, ''),
+  email: 'neildua0704@gmail.com',
   github: 'https://github.com/Neil-166',
   linkedin: 'https://linkedin.com/in/neil-dua',
+  leetcode: 'https://leetcode.com/u/Neil_Dua/',
+  codechef: 'https://www.codechef.com/users/neil0704',
+  resumePath: '/resume.pdf',
 };
 
 export const primaryNav: NavItem[] = [
@@ -23,5 +28,30 @@ export const primaryNav: NavItem[] = [
 export const socialLinks = [
   { label: 'GitHub', href: siteConfig.github, icon: FaGithub },
   { label: 'LinkedIn', href: siteConfig.linkedin, icon: FaLinkedinIn },
-  { label: 'Email', href: `mailto:${siteConfig.email}`, icon: FaEnvelope },
+];
+
+export const codingProfiles: CodingProfile[] = [
+  {
+    platform: 'LeetCode',
+    username: 'Neil_Dua',
+    href: siteConfig.leetcode,
+    description: 'Problem solving practice profile',
+    icon: SiLeetcode,
+  },
+  {
+    platform: 'CodeChef',
+    username: 'neil0704',
+    href: siteConfig.codechef,
+    description: 'Problem solving practice profile',
+    icon: SiCodechef,
+  },
+];
+
+export const currentlyLearning = [
+  'Data Structures & Algorithms',
+  'React Router',
+  'Tailwind CSS',
+  'Node.js Basics',
+  'Git & GitHub',
+  'Problem Solving on LeetCode and CodeChef',
 ];

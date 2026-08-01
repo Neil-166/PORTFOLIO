@@ -37,8 +37,10 @@
   .font-display { font-family: 'Space Grotesk', Manrope, sans-serif; }
   .eyebrow { @apply text-xs font-bold tracking-[.18em] text-brand; }
   .glass-card { @apply rounded-2xl border border-line/90 bg-surface/70 backdrop-blur-xl; box-shadow: inset 0 1px 0 rgb(255 255 255 / .035), 0 18px 45px rgb(0 0 0 / .09); }
-  .glass-card-tilt { transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; will-change: transform; }
+  .glass-card-tilt { position: relative; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; will-change: transform; }
+  .glass-card-tilt::before { position: absolute; inset: -1px; border: 1px solid transparent; border-radius: inherit; background: linear-gradient(135deg, rgb(143 164 255 / .65), rgb(192 102 255 / .35), transparent 62%) border-box; content: ''; mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0); mask-composite: exclude; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
   .glass-card-tilt:hover { @apply border-brand/35 shadow-glow; }
+  .glass-card-tilt:hover::before, .glass-card-tilt:focus-within::before { opacity: 1; }
   .btn-base { @apply relative inline-flex min-h-11 items-center justify-center gap-2 overflow-hidden rounded-xl px-4 py-2.5 text-sm font-bold transition duration-200 focus-visible:outline-none active:scale-[1.03]; }
   .btn-primary { @apply bg-brand text-slate-950 shadow-glow hover:brightness-110; }
   .btn-secondary { @apply border border-line bg-surface text-ink hover:border-brand/45 hover:bg-white/[.045]; }
@@ -46,9 +48,24 @@
   .input { @apply w-full rounded-xl border border-line bg-canvas/65 px-4 py-3 text-sm font-normal text-ink outline-none placeholder:text-muted/70 transition focus:border-brand focus:ring-2 focus:ring-brand/15; }
   .text-gradient { background: linear-gradient(120deg, #92a3ff, #c477ff 50%, #65e8da); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .button-ripple { position: absolute; border-radius: 9999px; pointer-events: none; background: rgb(255 255 255 / .33); transform: scale(0); animation: button-ripple .62s ease-out; }
+  .cursor-spotlight { background: radial-gradient(420px circle at var(--cursor-glow, -500px -500px), rgb(112 134 255 / .08), transparent 62%); }
+  .hero-orb { position: absolute; z-index: -10; width: 25rem; height: 25rem; border-radius: 9999px; filter: blur(76px); opacity: .14; animation: orb-drift 16s ease-in-out infinite alternate; pointer-events: none; }
+  .hero-orb-one { top: 3rem; left: -10rem; background: #526dff; }
+  .hero-orb-two { right: -9rem; bottom: 1rem; background: #af5cf7; animation-delay: -6s; }
+  .profile-frame::after { position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(135deg, rgb(255 255 255 / .12), transparent 38%, rgb(114 224 255 / .08)); content: ''; pointer-events: none; }
+  .internship-badge > span { box-shadow: 0 0 0 0 rgb(110 231 183 / .5); animation: status-pulse 2.8s ease-out infinite; }
+  .type-caret { width: 1px; height: 1.15em; background: currentColor; animation: blink 1s step-end infinite; }
+  .learning-chip { transition: transform .2s ease, border-color .2s ease, background-color .2s ease; }
+  .learning-chip:hover { transform: translateY(-3px); border-color: rgb(var(--brand) / .38); background-color: rgb(var(--brand) / .07); }
+  .project-card { isolation: isolate; }
+  .project-card::before { position: absolute; z-index: -1; inset: -1px; border-radius: 1.5rem; background: linear-gradient(135deg, rgb(132 149 255 / .75), rgb(192 102 255 / .45), transparent 62%); content: ''; opacity: 0; transition: opacity .22s ease; }
+  .project-card:hover::before, .project-card:focus-within::before { opacity: 1; }
 }
 
 @keyframes button-ripple { to { transform: scale(2.9); opacity: 0; } }
+@keyframes orb-drift { to { transform: translate3d(3rem, 1.5rem, 0) scale(1.12); } }
+@keyframes status-pulse { 70% { box-shadow: 0 0 0 7px rgb(110 231 183 / 0); } 100% { box-shadow: 0 0 0 0 rgb(110 231 183 / 0); } }
+@keyframes blink { 50% { opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
