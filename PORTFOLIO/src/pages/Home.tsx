@@ -63,7 +63,7 @@ export default function Home() {
                 transition={{ delay: reducedMotion ? 0 : 0.15 }}
                 className="mt-5 max-w-2xl text-lg leading-7 text-muted sm:text-xl"
               >
-                “I’m a second-year Computer Science student who enjoys solving problems with code and building modern web applications while continuously improving my DSA and development skills.”
+                “I enjoy solving problems with code and building modern web applications while continuously improving my DSA and development skills.”
               </motion.p>
 
               <motion.p

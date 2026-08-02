@@ -1,5 +1,5 @@
 import { FaGitAlt, FaNodeJs } from 'react-icons/fa6';
-import { SiCplusplus, SiExpress, SiHtml5, SiJavascript, SiMongodb, SiReact, SiTailwindcss } from 'react-icons/si';
+import { SiCplusplus, SiExpress, SiHtml5, SiJavascript, SiMongodb, SiReact, SiTailwindcss, SiTypescript } from 'react-icons/si';
 import type { Skill, Technology } from '@/types';
 
 export const skills: Skill[] = [
@@ -11,6 +11,7 @@ export const skills: Skill[] = [
   { name: 'Node.js', levelLabel: 'Beginner', category: 'Backend', color: '#8cc84b', icon: FaNodeJs },
   { name: 'Express.js', levelLabel: 'Beginner', category: 'Backend', color: '#a3a3a3', icon: SiExpress },
   { name: 'MongoDB', levelLabel: 'Beginner', category: 'Data', color: '#47a248', icon: SiMongodb },
+  { name: 'TypeScript', levelLabel: 'Beginner', category: 'Language', color: '#3178c6', icon: SiTypescript },
   { name: 'Git/GitHub', levelLabel: 'Intermediate', category: 'Tools', color: '#f05032', icon: FaGitAlt },
 ];
 

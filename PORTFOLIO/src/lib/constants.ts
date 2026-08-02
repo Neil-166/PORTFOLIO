@@ -4,7 +4,7 @@ import type { CodingProfile, NavItem } from '@/types';
 
 export const siteConfig = {
   name: 'Neil Dua',
-  title: 'B.Tech CSE Student | Aspiring Software Engineer',
+  title: 'Neil Dua | B.Tech CSE Student | Aspiring Software Engineer',
   description:
     'Portfolio of Neil Dua — 2nd-year B.Tech CSE student at ABES Engineering College, Ghaziabad. Focused on DSA, React, and web development. Explore projects and connect for internship opportunities.',
   url: (import.meta.env.VITE_SITE_URL ?? 'https://neildua.vercel.app').replace(/\/$/, ''),
@@ -13,7 +13,7 @@ export const siteConfig = {
   linkedin: 'https://linkedin.com/in/neil-dua',
   leetcode: 'https://leetcode.com/u/Neil_Dua/',
   codechef: 'https://www.codechef.com/users/neil0704',
-  resumePath: '/resume.pdf',
+  resumePath: '/NEIL DUA RESUME.pdf',
 };
 
 export const primaryNav: NavItem[] = [
