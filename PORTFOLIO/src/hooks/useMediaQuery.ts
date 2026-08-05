@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 
 export function useMediaQuery(query: string) {
-  const [matches, setMatches] = useState(false);
+  // Evaluate synchronously so the first render is already correct (no flash).
+  const [matches, setMatches] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia(query).matches : false,
+  );
   useEffect(() => {
     const media = window.matchMedia(query);
     const update = () => setMatches(media.matches);

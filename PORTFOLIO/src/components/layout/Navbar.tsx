@@ -1,24 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type MouseEvent } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaArrowUpRightFromSquare, FaBars, FaXmark } from 'react-icons/fa6';
 import { primaryNav, siteConfig } from '@/lib/constants';
+import { smoothScrollTo } from '@/lib/smoothScroll';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import type { NavItem } from '@/types';
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
   const location = useLocation();
+  const navigate = useNavigate();
   const reducedMotion = useReducedMotion();
+  const isHome = location.pathname === '/';
 
   useEffect(() => setOpen(false), [location.pathname]);
+
   useEffect(() => {
     const update = () => setScrolled(window.scrollY > 16);
     update();
     window.addEventListener('scroll', update, { passive: true });
     return () => window.removeEventListener('scroll', update);
   }, []);
+
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setOpen(false);
@@ -26,6 +33,40 @@ export function Navbar() {
     window.addEventListener('keydown', closeOnEscape);
     return () => window.removeEventListener('keydown', closeOnEscape);
   }, []);
+
+  // Scroll spy — highlight the home section currently in view.
+  useEffect(() => {
+    if (!isHome) {
+      setActiveSection(null);
+      return;
+    }
+    const ids = primaryNav.map((item) => item.sectionId).filter((id): id is string => Boolean(id));
+    const onScroll = () => {
+      let current = ids[0] ?? null;
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.45) current = id;
+      }
+      setActiveSection(current);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [isHome]);
+
+  /** Scroll to a section on the home page, or send the user home first. */
+  const goToSection = (event: MouseEvent<HTMLAnchorElement>, item: NavItem) => {
+    if (!item.sectionId) return;
+    event.preventDefault();
+    if (isHome) {
+      smoothScrollTo(item.sectionId, reducedMotion);
+    } else {
+      navigate('/', { state: { scrollTo: item.sectionId } });
+    }
+    setOpen(false);
+  };
+
+  const isItemActive = (item: NavItem) => (isHome ? item.sectionId === activeSection : location.pathname === item.href);
 
   return (
     <header className={cn('fixed inset-x-0 top-0 z-50 transition-all duration-300', scrolled ? 'py-3' : 'py-5')}>
@@ -36,32 +77,29 @@ export function Navbar() {
           scrolled && 'rounded-2xl border border-line/80 bg-canvas/75 shadow-2xl shadow-black/10 backdrop-blur-xl',
         )}
       >
-        <Link to="/" className="group flex items-center gap-2 font-display text-lg font-bold tracking-tight text-ink" aria-label="Neil Dua home">
+        <Link to="/" onClick={() => smoothScrollTo('hero', reducedMotion)} className="group flex items-center gap-2 font-display text-lg font-bold tracking-tight text-ink" aria-label="Neil Dua home">
           <span className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-blue-400 via-violet-400 to-pink-400 text-sm text-slate-950 shadow-glow">ND</span>
           <span>Neil<span className="text-brand">.</span></span>
         </Link>
 
         <div className="hidden items-center gap-1 lg:flex">
           {primaryNav.map((item) => (
-            <NavLink
-              end={item.href === '/'}
+            <Link
               key={item.href}
               to={item.href}
-              className={({ isActive }) => cn('relative rounded-lg px-3 py-2 text-sm font-semibold transition-colors hover:text-ink', isActive ? 'text-ink' : 'text-muted')}
+              onClick={(event) => goToSection(event, item)}
+              aria-current={isItemActive(item) ? 'page' : undefined}
+              className={cn('relative rounded-lg px-3 py-2 text-sm font-semibold transition-colors hover:text-ink', isItemActive(item) ? 'text-ink' : 'text-muted')}
             >
-              {({ isActive }) => (
-                <>
-                  {item.label}
-                  {isActive && (
-                    <motion.span
-                      layoutId="desktop-active-nav"
-                      transition={reducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 380, damping: 30 }}
-                      className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-blue-300 to-violet-400"
-                    />
-                  )}
-                </>
+              {item.label}
+              {isItemActive(item) && (
+                <motion.span
+                  layoutId="desktop-active-nav"
+                  transition={reducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 380, damping: 30 }}
+                  className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-blue-300 to-violet-400"
+                />
               )}
-            </NavLink>
+            </Link>
           ))}
         </div>
 
@@ -99,15 +137,14 @@ export function Navbar() {
             className="mx-5 mt-2 rounded-2xl border border-line bg-canvas/95 p-3 shadow-2xl backdrop-blur-xl sm:mx-8 lg:hidden"
           >
             {primaryNav.map((item) => (
-              <NavLink
-                end={item.href === '/'}
+              <Link
                 key={item.href}
                 to={item.href}
-                onClick={() => setOpen(false)}
-                className={({ isActive }) => cn('block rounded-xl px-4 py-3 text-sm font-semibold transition-colors', isActive ? 'bg-brand/15 text-ink' : 'text-muted hover:bg-white/5 hover:text-ink')}
+                onClick={(event) => goToSection(event, item)}
+                className={cn('block rounded-xl px-4 py-3 text-sm font-semibold transition-colors', isItemActive(item) ? 'bg-brand/15 text-ink' : 'text-muted hover:bg-white/5 hover:text-ink')}
               >
                 {item.label}
-              </NavLink>
+              </Link>
             ))}
           </motion.nav>
         )}

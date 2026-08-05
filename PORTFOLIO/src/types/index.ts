@@ -1,6 +1,11 @@
 import type { IconType } from 'react-icons';
 
-export interface NavItem { label: string; href: string; }
+export interface NavItem {
+  label: string;
+  href: string;
+  /** Section id on the home page that this nav item scrolls to. */
+  sectionId?: string;
+}
 
 export type SkillLevel = 'Beginner' | 'Beginner to Intermediate' | 'Intermediate';
 

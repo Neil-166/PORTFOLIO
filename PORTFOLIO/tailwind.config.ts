@@ -12,7 +12,10 @@ export default {
         line: 'rgb(var(--line) / <alpha-value>)',
         brand: 'rgb(var(--brand) / <alpha-value>)',
       },
-      fontFamily: { sans: ['Manrope', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+      fontFamily: {
+        sans: ['Manrope', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['Space Grotesk', 'Manrope', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      },
       boxShadow: {
         glow: '0 0 40px rgb(var(--brand) / 0.16)',
         card: '0 1px 0 rgb(255 255 255 / .04) inset, 0 18px 45px rgb(0 0 0 / .22)',

@@ -17,12 +17,12 @@ export const siteConfig = {
 };
 
 export const primaryNav: NavItem[] = [
-  { label: 'Home', href: '/' },
-  { label: 'About', href: '/about' },
-  { label: 'Skills', href: '/skills' },
-  { label: 'Projects', href: '/projects' },
-  { label: 'Coding', href: '/coding' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Home', href: '/', sectionId: 'hero' },
+  { label: 'About', href: '/about', sectionId: 'about' },
+  { label: 'Skills', href: '/skills', sectionId: 'skills' },
+  { label: 'Projects', href: '/projects', sectionId: 'projects' },
+  { label: 'Coding', href: '/coding', sectionId: 'coding' },
+  { label: 'Contact', href: '/contact', sectionId: 'contact' },
 ];
 
 export const socialLinks = [

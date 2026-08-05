@@ -2,10 +2,10 @@ import { lazy, Suspense, useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import Lenis from 'lenis';
 import { SiteLayout } from '@/components/layout/SiteLayout';
 import { PageLoader } from '@/components/ui/PageLoader';
 import { ScrollToTop } from '@/components/ui/ScrollToTop';
+import { destroySmoothScroll, initSmoothScroll } from '@/lib/smoothScroll';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 const Home = lazy(() => import('@/pages/Home'));
@@ -59,18 +59,8 @@ function AnimatedRoutes() {
 function SmoothScroll() {
   const reducedMotion = useReducedMotion();
   useEffect(() => {
-    if (reducedMotion) return undefined;
-    const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
-    let frame = 0;
-    const animate = (time: number) => {
-      lenis.raf(time);
-      frame = requestAnimationFrame(animate);
-    };
-    frame = requestAnimationFrame(animate);
-    return () => {
-      cancelAnimationFrame(frame);
-      lenis.destroy();
-    };
+    initSmoothScroll(reducedMotion);
+    return () => destroySmoothScroll();
   }, [reducedMotion]);
   return null;
 }
