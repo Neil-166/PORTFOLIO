@@ -1,1 +1,0 @@
-import{j as a,m as n}from"./motion-C0K8yS06.js";import{u as e,f as s}from"./index-6EhpSpwQ.js";function c({children:t,className:o}){const i=e();return a.jsx(n.main,{initial:i?!1:{opacity:0,y:8},animate:{opacity:1,y:0},exit:i?void 0:{opacity:0,y:-8},transition:{duration:i?0:.32},className:s("min-h-screen pt-28",o),children:t})}export{c as P};
