@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { FaArrowUpRightFromSquare, FaBars, FaXmark } from 'react-icons/fa6';
 import { primaryNav, siteConfig } from '@/lib/constants';
-import { ThemeSwitcher } from '@/components/layout/ThemeSwitcher';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
@@ -67,7 +66,6 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
-          <ThemeSwitcher />
           <a
             href={siteConfig.github}
             target="_blank"

@@ -18,8 +18,7 @@ import { projects } from '@/data/projects';
 import { codingProfiles, currentlyLearning, siteConfig, socialLinks } from '@/lib/constants';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useTypewriter } from '@/hooks/useTypewriter';
-
-const reveal = { hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } };
+import { fadeUp, heroBlur, staggerContainer } from '@/lib/animations';
 
 export default function Home() {
   const reducedMotion = useReducedMotion();
@@ -29,17 +28,20 @@ export default function Home() {
     <>
       <Seo />
       <main>
-        <section className="relative flex min-h-[min(820px,100svh)] items-center overflow-hidden px-5 pb-14 pt-32 sm:px-8">
+        <section className="relative flex min-h-[min(820px,100svh)] items-center overflow-hidden px-5 pb-16 pt-36 sm:px-8">
           <div className="hero-orb hero-orb-one" aria-hidden="true" />
           <div className="hero-orb hero-orb-two" aria-hidden="true" />
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_45%_32%,rgb(var(--brand)/.12),transparent_36%)]" />
 
           <div className="mx-auto grid w-full max-w-6xl gap-12 lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-center">
-            <div className="max-w-3xl">
+            <motion.div
+              variants={staggerContainer}
+              initial={reducedMotion ? false : 'hidden'}
+              animate="visible"
+              className="max-w-3xl"
+            >
               <motion.div
-                initial={reducedMotion ? false : 'hidden'}
-                animate="visible"
-                variants={reveal}
+                variants={heroBlur}
                 className="internship-badge inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-3 py-1.5 text-xs font-bold text-emerald-200"
               >
                 <span className="h-2 w-2 rounded-full bg-emerald-300" aria-hidden="true" />
@@ -47,30 +49,22 @@ export default function Home() {
               </motion.div>
 
               <motion.h1
-                initial={reducedMotion ? false : 'hidden'}
-                animate="visible"
-                variants={reveal}
-                transition={{ delay: reducedMotion ? 0 : 0.08 }}
-                className="mt-7 font-display text-3xl font-bold leading-tight tracking-[-0.045em] text-ink sm:text-4xl lg:text-[2.75rem] lg:leading-[1.12]"
+                variants={heroBlur}
+                className="heading-xl mt-7 text-[2.75rem] leading-[1.05] sm:text-6xl lg:text-[4.25rem]"
               >
-                Neil Dua — B.Tech CSE Student | Aspiring Software Engineer | Learning Full Stack Development
+                Neil Dua<span className="text-gradient">.</span>
               </motion.h1>
 
               <motion.p
-                initial={reducedMotion ? false : 'hidden'}
-                animate="visible"
-                variants={reveal}
-                transition={{ delay: reducedMotion ? 0 : 0.15 }}
-                className="mt-5 max-w-2xl text-lg leading-7 text-muted sm:text-xl"
+                variants={heroBlur}
+                className="mt-6 max-w-2xl text-lg leading-8 text-muted sm:text-xl"
               >
-                “I enjoy solving problems with code and building modern web applications while continuously improving my DSA and development skills.”
+                Aspiring software engineer — turning ideas into modern web applications while
+                strengthening my DSA and full-stack fundamentals.
               </motion.p>
 
               <motion.p
-                initial={reducedMotion ? false : 'hidden'}
-                animate="visible"
-                variants={reveal}
-                transition={{ delay: reducedMotion ? 0 : 0.22 }}
+                variants={heroBlur}
                 className="mt-5 flex min-h-7 items-center gap-2 text-sm font-semibold text-brand"
               >
                 <span className="text-muted">On the path to:</span>
@@ -78,13 +72,7 @@ export default function Home() {
                 {!reducedMotion && <span className="type-caret" aria-hidden="true" />}
               </motion.p>
 
-              <motion.div
-                initial={reducedMotion ? false : 'hidden'}
-                animate="visible"
-                variants={reveal}
-                transition={{ delay: reducedMotion ? 0 : 0.28 }}
-                className="mt-8 flex flex-wrap gap-3"
-              >
+              <motion.div variants={heroBlur} className="mt-8 flex flex-wrap gap-3">
                 <Magnetic>
                   <ButtonLink to="/projects">
                     View Projects <FaArrowRight aria-hidden="true" />
@@ -103,12 +91,7 @@ export default function Home() {
                 </Magnetic>
               </motion.div>
 
-              <motion.div
-                initial={reducedMotion ? false : { opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: reducedMotion ? 0 : 0.4 }}
-                className="mt-10 flex items-center gap-3"
-              >
+              <motion.div variants={heroBlur} className="mt-10 flex items-center gap-3">
                 <span className="text-xs font-semibold text-muted">FIND ME ON</span>
                 <div className="h-px w-8 bg-line" aria-hidden="true" />
                 {socialLinks.map(({ label, href, icon: Icon }) => (
@@ -125,12 +108,12 @@ export default function Home() {
                   </Magnetic>
                 ))}
               </motion.div>
-            </div>
+            </motion.div>
 
             <motion.div
               initial={reducedMotion ? false : { opacity: 0, scale: 0.9, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ delay: reducedMotion ? 0 : 0.16, type: 'spring', stiffness: 130, damping: 18 }}
+              transition={{ delay: reducedMotion ? 0 : 0.2, type: 'spring', stiffness: 130, damping: 18 }}
               className="mx-auto w-full max-w-[19rem]"
             >
               <div className="profile-frame relative grid aspect-square place-items-center overflow-hidden rounded-[2rem] border border-brand/30 bg-gradient-to-br from-brand/20 via-violet-500/10 to-cyan-300/10 p-5 shadow-glow">
@@ -182,7 +165,7 @@ export default function Home() {
           title="An honest snapshot of where I am today."
           copy="Early in the journey, focused on the fundamentals that compound."
         >
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-3">
             <GlassCard className="p-6">
               <p className="font-display text-2xl font-bold text-ink sm:text-3xl">2025–2029</p>
               <p className="mt-2 text-sm leading-6 text-muted">B.Tech CSE at ABES Engineering College, Ghaziabad</p>
@@ -199,21 +182,24 @@ export default function Home() {
         </Section>
 
         <Section eyebrow="CURRENTLY LEARNING" title="What I am working on right now." copy="A focused set of fundamentals, explored steadily.">
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {currentlyLearning.map((topic, index) => (
+          <motion.div
+            variants={staggerContainer}
+            initial={reducedMotion ? false : 'hidden'}
+            whileInView={reducedMotion ? undefined : 'visible'}
+            viewport={{ once: true, amount: 0.15 }}
+            className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {currentlyLearning.map((topic) => (
               <motion.div
                 key={topic}
-                initial={reducedMotion ? false : { opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ delay: reducedMotion ? 0 : index * 0.04 }}
+                variants={fadeUp}
                 className="learning-chip flex items-center gap-3 rounded-2xl border border-line bg-surface/70 px-4 py-3 text-sm font-semibold text-ink"
               >
                 <span className="h-2 w-2 rounded-full bg-gradient-to-r from-blue-300 to-violet-400 shadow-glow" aria-hidden="true" />
                 {topic}
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </Section>
 
         <Section
@@ -222,19 +208,31 @@ export default function Home() {
           title="Problem-solving practice, without inflated numbers."
           copy="Follow my learning journey on the platforms where I practice."
         >
-          <div className="grid gap-4 md:grid-cols-2">
+          <motion.div
+            variants={staggerContainer}
+            initial={reducedMotion ? false : 'hidden'}
+            whileInView={reducedMotion ? undefined : 'visible'}
+            viewport={{ once: true, amount: 0.15 }}
+            className="grid gap-5 md:grid-cols-2"
+          >
             {codingProfiles.map((profile) => (
               <CodingProfileCard key={profile.platform} profile={profile} />
             ))}
-          </div>
+          </motion.div>
         </Section>
 
         <Section eyebrow="SELECTED WORK" title="Projects I am documenting as I learn." copy="Each project is a chance to explore a product problem and strengthen the fundamentals.">
-          <div className="grid gap-5 md:grid-cols-2">
+          <motion.div
+            variants={staggerContainer}
+            initial={reducedMotion ? false : 'hidden'}
+            whileInView={reducedMotion ? undefined : 'visible'}
+            viewport={{ once: true, amount: 0.15 }}
+            className="grid gap-6 md:grid-cols-2"
+          >
             {projects.slice(0, 3).map((project, index) => (
               <ProjectCard key={project.slug} project={project} featured={index === 0} />
             ))}
-          </div>
+          </motion.div>
           <Link
             to="/projects"
             className="mt-8 inline-flex items-center gap-2 text-sm font-bold text-brand transition hover:gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"

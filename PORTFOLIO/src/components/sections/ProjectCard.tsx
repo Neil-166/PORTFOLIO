@@ -1,66 +1,111 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { FaArrowRight, FaArrowUpRightFromSquare, FaChevronDown, FaGithub } from 'react-icons/fa6';
+import { FaArrowRight, FaArrowUpRightFromSquare, FaChevronDown, FaGithub, FaWandMagicSparkles } from 'react-icons/fa6';
 import type { Project } from '@/types';
 import { Button, ButtonLink } from '@/components/ui/Button';
+import { useTilt } from '@/hooks/useTilt';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { fadeUp } from '@/lib/animations';
 
 export function ProjectCard({ project, featured = false }: { project: Project; featured?: boolean }) {
   const [expanded, setExpanded] = useState(false);
   const reducedMotion = useReducedMotion();
+  const { ref, tilt, resetTilt, enabled } = useTilt({ max: 2.5, lift: 4 });
+
+  const visibleStack = project.stack.slice(0, 4);
+  const overflowCount = project.stack.length - visibleStack.length;
 
   return (
     <motion.article
-      initial={reducedMotion ? false : { opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      whileHover={reducedMotion ? undefined : { y: -7 }}
-      whileTap={reducedMotion ? undefined : { scale: 0.985 }}
+      variants={fadeUp}
+      whileHover={reducedMotion ? undefined : { y: -6 }}
       className={featured ? 'sm:col-span-2' : ''}
     >
-      <div className="project-card group relative flex h-full flex-col overflow-hidden rounded-3xl border border-line bg-surface p-3 transition-shadow focus-within:shadow-glow hover:shadow-glow">
-        <Link
-          to={`/projects/${project.slug}`}
-          className="block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
-          aria-label={`View details for ${project.title}`}
-        >
-          <div className={`relative min-h-52 overflow-hidden rounded-2xl bg-gradient-to-br ${project.gradient} p-5 ${featured ? 'sm:min-h-72' : ''}`}>
-            {/* TODO: Replace with an authentic project screenshot. */}
+      <div
+        ref={ref}
+        onPointerMove={enabled ? tilt : undefined}
+        onPointerLeave={resetTilt}
+        className="project-card group relative flex h-full flex-col overflow-hidden rounded-3xl border border-line bg-surface p-3 shadow-card transition-[transform,box-shadow] duration-200 will-change-transform focus-within:shadow-glow hover:shadow-glow"
+      >
+        <div className={`relative min-h-52 overflow-hidden rounded-2xl bg-gradient-to-br ${project.gradient} ${featured ? 'sm:min-h-72' : ''}`}>
+          <Link
+            to={`/projects/${project.slug}`}
+            className="absolute inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+            aria-label={`View details for ${project.title}`}
+          >
             <img
               src={project.screenshot}
               alt={`${project.title} placeholder — replace with an authentic project screenshot`}
               loading="lazy"
-              className="absolute inset-0 h-full w-full object-cover opacity-80 transition duration-500 group-hover:scale-105 motion-reduce:transition-none"
+              className="h-full w-full object-cover opacity-80 transition duration-500 group-hover:scale-105 motion-reduce:transition-none"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/65 via-transparent" aria-hidden="true" />
-            <p className="relative text-xs font-bold uppercase tracking-[0.15em] text-white/80">{project.eyebrow}</p>
-            <span
-              className="absolute bottom-4 right-4 grid h-10 w-10 place-items-center rounded-full bg-white/15 text-white backdrop-blur-sm transition group-hover:rotate-45 motion-reduce:transition-none"
-              aria-hidden="true"
-            >
-              <FaArrowUpRightFromSquare />
-            </span>
-          </div>
-          <div className="px-2 pb-2 pt-5">
-            <h3 className="font-display text-xl font-bold text-ink">{project.title}</h3>
-            <p className="mt-2 text-sm leading-6 text-muted">{project.summary}</p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {project.stack.slice(0, 3).map((item) => (
-                <span key={item} className="rounded-full border border-line px-2.5 py-1 text-xs text-muted">
-                  {item}
-                </span>
-              ))}
-            </div>
-          </div>
-        </Link>
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent" aria-hidden="true" />
+            <p className="absolute left-4 top-4 text-xs font-bold uppercase tracking-[0.15em] text-white/85">{project.eyebrow}</p>
+          </Link>
 
-        <div className="mt-auto flex flex-wrap gap-2 px-2 pb-2 pt-3">
+          {featured && (
+            <span className="absolute left-4 top-[3.35rem] inline-flex items-center gap-1.5 rounded-full border border-amber-300/30 bg-amber-400/15 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-amber-200 backdrop-blur-sm">
+              <FaWandMagicSparkles aria-hidden="true" /> Featured
+            </span>
+          )}
+
+          <div className="absolute right-4 top-4 z-10 flex flex-col gap-2 sm:translate-x-2 sm:opacity-0 sm:transition-all sm:duration-300 sm:group-hover:translate-x-0 sm:group-hover:opacity-100 sm:group-focus-within:translate-x-0 sm:group-focus-within:opacity-100">
+            {project.github && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label={`View ${project.title} source on GitHub`}
+                className="grid h-9 w-9 place-items-center rounded-full border border-white/15 bg-slate-950/45 text-white backdrop-blur-md transition hover:bg-slate-950/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                <FaGithub aria-hidden="true" />
+              </a>
+            )}
+            {project.demo && (
+              <a
+                href={project.demo}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label={`Open live demo of ${project.title}`}
+                className="grid h-9 w-9 place-items-center rounded-full border border-white/15 bg-slate-950/45 text-white backdrop-blur-md transition hover:bg-slate-950/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                <FaArrowUpRightFromSquare aria-hidden="true" />
+              </a>
+            )}
+          </div>
+        </div>
+
+        <div className="flex flex-1 flex-col px-2 pb-2 pt-5">
+          <h3 className="font-display text-[1.35rem] font-bold leading-snug text-ink">{project.title}</h3>
+          <p className="mt-2 text-sm leading-6 text-muted">{project.summary}</p>
+
+          <div className="mt-4 flex items-center gap-3 text-[11px] font-semibold uppercase tracking-wider text-muted">
+            <span>{project.stack.length} technologies</span>
+            <span className="h-1 w-1 rounded-full bg-line" aria-hidden="true" />
+            <span>{project.features.length} features</span>
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            {visibleStack.map((item) => (
+              <span key={item} className="rounded-full border border-line bg-white/[.03] px-2.5 py-1 text-xs text-muted">
+                {item}
+              </span>
+            ))}
+            {overflowCount > 0 && (
+              <span className="rounded-full border border-brand/25 bg-brand/10 px-2.5 py-1 text-xs font-semibold text-brand">
+                +{overflowCount} more
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-auto flex flex-wrap items-center gap-2 px-2 pb-2 pt-3">
           <Button
             type="button"
             onClick={() => setExpanded((value) => !value)}
             variant="ghost"
-            className="text-xs"
+            className="text-[13px]"
             aria-expanded={expanded}
             aria-controls={`${project.slug}-overview`}
           >
@@ -70,20 +115,10 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
           <ButtonLink
             to={`/projects/${project.slug}`}
             variant="secondary"
-            className="text-xs"
+            className="text-[13px]"
             aria-label={`View ${project.title} details`}
           >
-            Project details <FaArrowRight aria-hidden="true" />
-          </ButtonLink>
-          <ButtonLink
-            href={project.github}
-            target="_blank"
-            rel="noreferrer noopener"
-            variant="secondary"
-            className="text-xs"
-            aria-label={`View Neil Dua's GitHub profile`}
-          >
-            <FaGithub aria-hidden="true" /> GitHub Profile
+            Details <FaArrowRight aria-hidden="true" />
           </ButtonLink>
         </div>
 

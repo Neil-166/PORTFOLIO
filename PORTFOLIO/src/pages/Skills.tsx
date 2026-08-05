@@ -1,12 +1,16 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Seo } from '@/components/ui/Seo';
 import { PageShell } from '@/components/ui/PageShell';
 import { Section } from '@/components/ui/Section';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { levelBadgeStyles, levelIndicatorDots, skills } from '@/data/skills';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { fadeUp, staggerContainer } from '@/lib/animations';
 
 export default function Skills() {
   const [active, setActive] = useState('All');
+  const reducedMotion = useReducedMotion();
   const categories = ['All', ...new Set(skills.map((skill) => skill.category))];
   const visible = active === 'All' ? skills : skills.filter((skill) => skill.category === active);
 
@@ -36,36 +40,44 @@ export default function Skills() {
               </button>
             ))}
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <motion.div
+            variants={staggerContainer}
+            initial={reducedMotion ? false : 'hidden'}
+            whileInView={reducedMotion ? undefined : 'visible'}
+            viewport={{ once: true, amount: 0.15 }}
+            className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
+          >
             {visible.map(({ name, levelLabel, color, icon: Icon }) => (
-              <GlassCard key={name} className="group p-5">
-                <div className="flex items-start justify-between gap-3">
-                  <span
-                    className="grid h-11 w-11 place-items-center rounded-xl bg-white/5 text-xl"
-                    style={{ color }}
-                    aria-hidden="true"
-                  >
-                    <Icon />
-                  </span>
-                  <span
-                    className={`rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide ${levelBadgeStyles[levelLabel]}`}
-                  >
-                    {levelLabel}
-                  </span>
-                </div>
-                <h3 className="mt-5 font-semibold text-ink">{name}</h3>
-                <div className="mt-3 flex items-center gap-1.5" aria-label={`${name}: ${levelLabel}`}>
-                  {Array.from({ length: 5 }, (_, index) => (
+              <motion.div key={name} variants={fadeUp}>
+                <GlassCard className="group p-5">
+                  <div className="flex items-start justify-between gap-3">
                     <span
-                      key={index}
-                      className={`h-1.5 flex-1 rounded-full ${index < levelIndicatorDots[levelLabel] ? 'bg-brand/70' : 'bg-white/10'}`}
+                      className="grid h-11 w-11 place-items-center rounded-xl bg-white/5 text-xl"
+                      style={{ color }}
                       aria-hidden="true"
-                    />
-                  ))}
-                </div>
-              </GlassCard>
+                    >
+                      <Icon />
+                    </span>
+                    <span
+                      className={`rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide ${levelBadgeStyles[levelLabel]}`}
+                    >
+                      {levelLabel}
+                    </span>
+                  </div>
+                  <h3 className="mt-5 font-semibold text-ink">{name}</h3>
+                  <div className="mt-3 flex items-center gap-1.5" aria-label={`${name}: ${levelLabel}`}>
+                    {Array.from({ length: 5 }, (_, index) => (
+                      <span
+                        key={index}
+                        className={`h-1.5 flex-1 rounded-full ${index < levelIndicatorDots[levelLabel] ? 'bg-brand/70' : 'bg-white/10'}`}
+                        aria-hidden="true"
+                      />
+                    ))}
+                  </div>
+                </GlassCard>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </Section>
 
         <Section eyebrow="LEARNING NOTE" title="Progress over percentages.">

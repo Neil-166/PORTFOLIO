@@ -1,0 +1,1 @@
+import{j as l}from"./motion-C0K8yS06.js";import{u as m}from"./useTilt-_fdMyNrt.js";import{f as c}from"./index-6EhpSpwQ.js";function p({className:s,hover:t=!0,children:r,...e}){const{ref:o,tilt:a,resetTilt:i,enabled:n}=m();return l.jsx("div",{ref:o,onPointerMove:t&&n?a:void 0,onPointerLeave:i,className:c("glass-card",t&&"glass-card-tilt",s),...e,children:r})}export{p as G};

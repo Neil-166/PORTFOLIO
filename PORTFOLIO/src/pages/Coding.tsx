@@ -1,4 +1,5 @@
 import { FaArrowUpRightFromSquare, FaGithub } from 'react-icons/fa6';
+import { motion } from 'framer-motion';
 import { Seo } from '@/components/ui/Seo';
 import { PageShell } from '@/components/ui/PageShell';
 import { Section } from '@/components/ui/Section';
@@ -6,8 +7,11 @@ import { GlassCard } from '@/components/ui/GlassCard';
 import { ButtonLink } from '@/components/ui/Button';
 import { CodingProfileCard } from '@/components/sections/CodingProfileCard';
 import { codingProfiles, siteConfig } from '@/lib/constants';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { staggerContainer } from '@/lib/animations';
 
 export default function Coding() {
+  const reducedMotion = useReducedMotion();
   return (
     <>
       <Seo title="Coding Profiles" path="/coding" />
@@ -17,11 +21,17 @@ export default function Coding() {
           title="Problem-solving practice."
           copy="My profile links are here for context — I intentionally do not publish unverified solved counts, ranks, ratings, or streaks."
         >
-          <div className="grid gap-4 md:grid-cols-2">
+          <motion.div
+            variants={staggerContainer}
+            initial={reducedMotion ? false : 'hidden'}
+            whileInView={reducedMotion ? undefined : 'visible'}
+            viewport={{ once: true, amount: 0.15 }}
+            className="grid gap-5 md:grid-cols-2"
+          >
             {codingProfiles.map((profile) => (
               <CodingProfileCard key={profile.platform} profile={profile} />
             ))}
-          </div>
+          </motion.div>
         </Section>
 
         <Section eyebrow="GITHUB" title="Projects and learning in public.">

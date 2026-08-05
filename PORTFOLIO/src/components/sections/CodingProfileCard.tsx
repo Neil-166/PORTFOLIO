@@ -3,18 +3,12 @@ import { FaArrowUpRightFromSquare } from 'react-icons/fa6';
 import type { CodingProfile } from '@/types';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { ButtonLink } from '@/components/ui/Button';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { fadeUp } from '@/lib/animations';
 
 export function CodingProfileCard({ profile }: { profile: CodingProfile }) {
   const Icon = profile.icon;
-  const reducedMotion = useReducedMotion();
   return (
-    <motion.div
-      initial={reducedMotion ? false : { opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      whileTap={reducedMotion ? undefined : { scale: 0.98 }}
-      viewport={{ once: true, amount: 0.2 }}
-    >
+    <motion.div variants={fadeUp}>
       <GlassCard className="flex h-full flex-col p-6">
         <span className="grid h-12 w-12 place-items-center rounded-xl bg-brand/12 text-2xl text-brand" aria-hidden="true">
           <Icon />

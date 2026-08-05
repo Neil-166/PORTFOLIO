@@ -13,7 +13,11 @@ export default {
         brand: 'rgb(var(--brand) / <alpha-value>)',
       },
       fontFamily: { sans: ['Manrope', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
-      boxShadow: { glow: '0 0 40px rgb(var(--brand) / 0.16)' },
+      boxShadow: {
+        glow: '0 0 40px rgb(var(--brand) / 0.16)',
+        card: '0 1px 0 rgb(255 255 255 / .04) inset, 0 18px 45px rgb(0 0 0 / .22)',
+        'card-lg': '0 1px 0 rgb(255 255 255 / .05) inset, 0 30px 70px rgb(0 0 0 / .3)',
+      },
       backgroundImage: { grid: 'linear-gradient(rgb(255 255 255 / 0.045) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / 0.045) 1px, transparent 1px)' },
     },
   },
